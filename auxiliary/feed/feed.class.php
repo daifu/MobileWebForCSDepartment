@@ -106,8 +106,11 @@ class Feed
         }
 
         $this->_items = array();
-        foreach($feed->get_items() as $item)
-            $this->_items[] = new Feed_Item($this, $item);
+        foreach($feed->get_items() as $item) {
+            $temp = new Feed_Item($this, $item);
+            $this->_items[] = $temp;
+        }
+
         return $this->_items;
     }
 
@@ -120,10 +123,12 @@ class Feed
      */
     public function get_item($name)
     {
-        foreach($this->get_items() as $item)
-            if($item->get_name() == $name)
+        foreach($this->get_items() as $item) {
+            if($item->get_name() == $name) {
                 return $item;
-
+            }
+        }
+        
         return false;
     }
 
@@ -177,4 +182,5 @@ class Feed
 
         return new Feed($_GET['name'], $_GET['path']);
     }
+
 }

@@ -19,45 +19,36 @@
  * @uses Body_End_HTML_Decorator
  * @uses HTML_End_HTML_Decorator
  */
-
 require_once(dirname(dirname(__FILE__)).'/assets/config.php');
+require_once(dirname(dirname(dirname(__FILE__))).'/auxiliary/feed/feed.class.php');
 require_once(dirname(dirname(__FILE__)).'/assets/lib/decorator.class.php');
 
 echo HTML_Decorator::html_start()->render();
 
-echo Site_Decorator::head()->set_title('UCLA CS About')->render();
+echo Site_Decorator::head()->set_title('UCLA CS Awards')->render();
 
 echo HTML_Decorator::body_start()->render();
 
 echo Site_Decorator::header()
-        ->set_title('UCLA CS About')
+        ->set_title('UCLA CS Awards')
         ->render();
 
 $links = array(
-   array('name' => 'Chair\'s Welcome',
-         'link' => 'about/welcome.php'),
-   array('name' => 'Mission Statement',
-         'link' => 'about/mission_statement.php'),
-   // array('name' => 'Academic And Staff Positions',
-   //       'link' => 'about/academic_and_staff_positions.php'),
-   // array('name' => 'Industrial Affiliates Program',
-   //       'link' => 'about/industrial_affiliates_program.php'),
-   // array('name' => 'Annual Reports',
-   //       'link' => 'about/annual_reports.php'),
-   // array('name' => 'Annual Reports',
-   //       'link' => 'about/annual_reports.php'),
-   array('name' => 'Administration',
-         'link' => 'about/administration.php'),
-   // array('name' => 'Visitor Information',
-   //       'link' => 'about/visitor_information.php')
+   array('name' => 'Seminars',
+         'link' => 'events/seminars.php'),
+   array('name' => 'Faculty Candidate Talks',
+         'link' => 'events/faculty_candidate_talks.php'),
+   array('name' => 'Jon Postel Lecturer Series',
+         'link' => 'events/jon_postel_lecturer_series.php')
 );
 
 //Create menu for about page
-$about_obj = Site_Decorator::menu_full();
+$menu = Site_Decorator::menu_full();
 foreach ($links as $link) {
-   $about_obj->add_item($link['name'], $link['link']);
+   $menu->add_item($link['name'], $link['link']);
 }
-echo $about_obj->set_padded()->set_detailed();
+echo $menu->set_padded()->set_detailed();
+
 
 echo Site_Decorator::button_full()
                 ->set_padded()

@@ -31,7 +31,7 @@ Config::set('frontpage', 'help_site_url', Config::get('global', 'help_site_url')
  * header_main_text
  */
 
-Config::set('frontpage', 'header_image_main', Config::get('global', 'site_assets_url').'/img/mwf-header-front.gif');
+Config::set('frontpage', 'header_image_main', Config::get('global', 'site_assets_url').'/img/ucla-header-front.png');
 Config::set('frontpage', 'header_image_main_alt', 'MWF');
 Config::set('frontpage', 'header_image_sub_alt', 'MWF');
 Config::set('frontpage', 'header_image_sub', Config::get('global', 'site_assets_url').'/img/mwf-header.gif');
@@ -69,9 +69,15 @@ Config::set('frontpage', 'menu',
         array('name'=>'About',
               'id'=>'about',
               'url'=>'cs/about.php')
-        ,array('name'=>'Device Telemetry',
-               'id'=>'device',
-               'url'=>'mwf/device.php')
+        ,array('name'=>'News',
+               'id'=>'news',
+               'url'=>'cs/news.php')
+        ,array('name'=>'Awards',
+               'id'=>'awards',
+               'url'=>'cs/awards.php')
+        ,array('name'=>'Events',
+               'id'=>'events',
+               'url'=>'cs/events.php')
         ,array('name'=>'Collaboration',
               'id'=>'showcase',
               'url'=>'index.php?s=collaboration')

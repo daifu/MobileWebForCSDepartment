@@ -9,6 +9,9 @@
  * @version 20110727
  */
 
+require_once(dirname(__FILE__).'/feed_database.class.php');
+require_once(dirname(__FILE__).'/cScrape.php');
+
 class Feed_Item
 {
     /**
@@ -142,6 +145,11 @@ class Feed_Item
         return $this->_description;
     }
 
+    public function set_description($desc)
+    {
+        $this->_description = $desc;
+    }
+
     /**
      * Accessor method to get a short description, which is simply the item
      * description truncated to $n characters.
@@ -194,5 +202,37 @@ class Feed_Item
     public function verify_page($signature, $salt)
     {
         return $signature == md5($salt.$this->get_feed()->get_name().$this->get_feed()->get_path().$this->get_title());
+    }
+
+    /*
+     * Get the article when the artcle is not available in the RSS
+     *
+     * */
+    public function get_page_by_url()
+    {
+        //Check if there is saved in the database.
+        $db = new Feed_Database();
+        $db_feed = $db->find_news_feed($this->_title);
+        if ($db_feed) {
+            return $db_feed->description;
+        } else {
+            $desc = $this->scrape_content($this->_link);
+            $db->save_news_feed($this, $desc);
+            return $desc;
+        }
+    }
+
+    public function scrape_content($url)
+    {
+        $scrape = new Scrape();
+        $scrape->fetch($url);
+        $data = $scrape->removeNewlines($scrape->result);
+        $data = $scrape->fetchBetween('<div id="parent-fieldname-text" class="plain">', '</div>', $data, true);
+        //replace </p> to <br>
+        $newData = str_replace('</p>', '<br><br>', $data);
+        $newData = str_replace('\'', '', $newData);
+        //strip tags
+        $newData = strip_tags($newData, '<br>');
+        return $newData;
     }
 }
