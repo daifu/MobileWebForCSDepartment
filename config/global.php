@@ -26,8 +26,13 @@ require_once(dirname(dirname(__FILE__)).'/root/assets/lib/config.class.php');
  * DO NOT INCLUDE A TRAILING SLASH
  */
 
-Config::set('global', 'site_url', 'http://localhost:8888/mwf/root');
-Config::set('global', 'site_assets_url', 'http://localhost:8888/mwf/root/assets');
+if (Config::isDeploy()) {
+   Config::set('global', 'site_url', 'http://uclacs.phpfogapp.com/root');
+   Config::set('global', 'site_assets_url', 'http://uclacs.phpfogapp.com/root/assets');
+} else {
+   Config::set('global', 'site_url', 'http://localhost:8888/mwf/root');
+   Config::set('global', 'site_assets_url', 'http://localhost:8888/mwf/root/assets');
+}
 Config::set('global', 'site_nonmobile_url', false);
 Config::set('global', 'full_site_url', 'http://cs.ucla.edu');
 Config::set('global', 'help_site_url', false);

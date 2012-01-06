@@ -59,6 +59,18 @@ class Config
         
         self::$_vars[$cat][$key] = $value;
     }
+
+    /*
+     * determine it is deploy or development mode
+     * */
+    public static function isDeploy()
+    {
+       if (preg_match('/(localhost|127.0.0.1)/', $_SERVER['HTTP_HOST'])) {
+          return false;
+       } else {
+          return true;
+       }
+    }
 }
 
 ?>
