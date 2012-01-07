@@ -39,7 +39,7 @@ $feed = new Feed('UCLACSJonPostelLecturerSeries', 'http://www.cs.ucla.edu/events
 $feed_items = $feed->get_items();
 foreach ($feed_items as $item) {
    $title = $item->get_title();
-   $menu->add_item($title, $item->get_page('seminar_item.php'));
+   $menu->add_item($title, $item->get_page('jon_postel_lecturer_series_item.php'));
 }
 
 echo $menu->set_padded()->set_detailed();

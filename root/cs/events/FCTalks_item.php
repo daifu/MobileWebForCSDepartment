@@ -66,10 +66,10 @@ echo Site_Decorator::content_full()
 
 
 
-// echo Site_Decorator::button_full()
-//    ->set_padded()
-//    ->add_option('Go back to seminars', Config::get('global', 'site_url').'/cs/events/seminars.php')
-//    ->render();
+echo Site_Decorator::button_full()
+   ->set_padded()
+   ->add_option('Go back', Config::get('global', 'site_url').'/cs/events/faculty_candidate_talks.php')
+   ->render();
 
 echo Site_Decorator::default_footer()->render();
 
