@@ -66,18 +66,18 @@ Config::set('frontpage', 'header_main_text', 'UCLA Mobile Web Framework');
 Config::set('frontpage', 'menu',  
    array(
    'default'=>array(
-        array('name'=>'About',
-              'id'=>'about',
-              'url'=>'cs/about.php')
-        ,array('name'=>'News',
+        array('name'=>'News',
                'id'=>'news',
                'url'=>'cs/news.php')
-        ,array('name'=>'Awards',
-               'id'=>'awards',
-               'url'=>'cs/awards.php')
         ,array('name'=>'Events',
                'id'=>'events',
                'url'=>'cs/events.php')
+        ,array('name'=>'About',
+              'id'=>'about',
+              'url'=>'cs/about.php')
+        ,array('name'=>'Awards',
+               'id'=>'awards',
+               'url'=>'cs/awards.php')
         )
     )
 );
