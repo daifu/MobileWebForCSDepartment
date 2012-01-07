@@ -78,25 +78,6 @@ Config::set('frontpage', 'menu',
         ,array('name'=>'Events',
                'id'=>'events',
                'url'=>'cs/events.php')
-        ,array('name'=>'Collaboration',
-              'id'=>'showcase',
-              'url'=>'index.php?s=collaboration')
-        ,array('name'=>'License',
-              'id'=>'license',
-              'url'=>'mwf/license.php')
-        ,array('name'=>'Credits',
-              'id'=>'credits',
-              'url'=>'mwf/credits.php')
-        )
-    ,'collaboration'=>array(
-        array('name'=>'Home',
-              'url'=>'http://mwf.ucla.edu'),
-        array('name'=>'Repository',
-              'url'=>'https://github.com/ucla/mwf'),
-        array('name'=>'Documentation',
-              'url'=>'https://github.com/ucla/mwf/wiki'),
-        array('name'=>'Issue Tracker',
-              'url'=>'https://jira.ats.ucla.edu:8443/')
         )
     )
 );

@@ -56,6 +56,10 @@ class Feed_Item
      */
     private $_author;
 
+    private $_scrape;
+    private $_time;
+    private $_location;
+
     /**
      * The constructor stores feed item attributes as properties.
      * 
@@ -150,6 +154,28 @@ class Feed_Item
         $this->_description = $desc;
     }
 
+    public function getTime()
+    {
+        if (isset($this->_time) && !empty($this->_time)) {
+            return $this->_time;
+        } else {
+            $db = new Feed_Database();
+            $db_feed = $db->find_news_feed($this->_title);
+            return $db_feed->date;
+        }
+    }
+
+    public function getLocation()
+    {
+        if (isset($this->_location) && !empty($this->_location)) {
+            return $this->_location;
+        } else {
+            $db = new Feed_Database();
+            $db_feed = $db->find_news_feed($this->_title);
+            return $db_feed->location;
+        }
+    }
+
     /**
      * Accessor method to get a short description, which is simply the item
      * description truncated to $n characters.
@@ -186,9 +212,9 @@ class Feed_Item
      * @param string $salt a salt for verifying the page
      * @return string the desired URL
      */
-    public function get_page($salt = null)
+    public function get_page($page=null, $salt = null)
     {
-        $path = 'item.php?name='.urlencode($this->get_feed()->get_name()).'&path='.urlencode($this->get_feed()->get_path()).'&article='.urlencode($this->get_title());
+        $path = $page.'?name='.urlencode($this->get_feed()->get_name()).'&path='.urlencode($this->get_feed()->get_path()).'&article='.urlencode($this->get_title());
         return $salt ? $path.'&signature='.md5($salt.$this->get_feed()->get_name().$this->get_feed()->get_path().$this->get_title()) : $path;
     }
 
@@ -208,7 +234,7 @@ class Feed_Item
      * Get the article when the artcle is not available in the RSS
      *
      * */
-    public function get_page_by_url()
+    public function get_page_by_url($div)
     {
         //Check if there is saved in the database.
         $db = new Feed_Database();
@@ -216,23 +242,36 @@ class Feed_Item
         if ($db_feed) {
             return $db_feed->description;
         } else {
-            $desc = $this->scrape_content($this->_link);
-            $db->save_news_feed($this, $desc);
+            list($desc, $date, $location) = $this->scrape_content($this->_link, $div);
+            $this->_time = $date;
+            $this->_location = $location;
+            $db->save_news_feed($this, $desc, $date, $location);
             return $desc;
         }
     }
 
-    public function scrape_content($url)
+    public function scrape_content($url, $div)
     {
-        $scrape = new Scrape();
-        $scrape->fetch($url);
-        $data = $scrape->removeNewlines($scrape->result);
-        $data = $scrape->fetchBetween('<div id="parent-fieldname-text" class="plain">', '</div>', $data, true);
+        $this->_scrape = new Scrape();
+        $this->_scrape->fetch($url);
+        $data = $this->_scrape->removeNewlines($this->_scrape->result);
+
+        list($date, $location) = $this->scrape_date_location($data);
+
+        $data = $this->_scrape->fetchBetween($div, '</div>', $data, true);
         //replace </p> to <br>
-        $newData = str_replace('</p>', '<br><br>', $data);
-        $newData = str_replace('\'', '', $newData);
+        $description = str_replace('</p>', '<br><br>', $data);
         //strip tags
-        $newData = strip_tags($newData, '<br>');
-        return $newData;
+        $description = strip_tags($description, '<br><iframe><strong>');
+        return array($description, $date, $location);
     }
+
+    public function scrape_date_location($data)
+    {
+        $rows = $this->_scrape->fetchAllBetween('<td>', '</td>', $data, true);
+        $date = strip_tags(str_replace('</span>', ' ', $rows[1]));
+        $location = strip_tags($this->_scrape->fetchBetween('<td class="location">', '</td>', $data, true));
+        return array($date, $location);
+    }
+
 }

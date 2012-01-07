@@ -32,6 +32,7 @@ echo Site_Decorator::header()
 
 echo Site_Decorator::content_full()
             ->set_padded()
+            ->add_header('Mission')
             ->add_paragraph('The Computer Science Department strives for excellence in creating, applying, and imparting knowledge in computer science and engineering through comprehensive educational programs, research in collaboration with industry and government, dissemination through scholarly publications, and service to professional societies, the community, the state, and the nation.')
             ->render();
 

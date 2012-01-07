@@ -19,7 +19,7 @@ class Feed_Database
         $this->client = new couchClient('https://daifu:123456@daifu.cloudant.com:443/', 'ucla_cs_news_feed');
     }
 
-    public function save_news_feed($news_feed, $desc)
+    public function save_news_feed($news_feed, $desc, $date, $location)
     {
         try {
             //look for the news_feed whether is existed or not
@@ -31,7 +31,9 @@ class Feed_Database
         }
         $newDoc = new stdClass();
         $newDoc->description = urlencode($desc);
-        $newDoc->_id = str_replace('\'', '', $news_feed->get_title());
+        $newDoc->_id = utf8_encode($news_feed->get_title());
+        $newDoc->date = $date;
+        $newDoc->location = $location;
         try {
             $response = $this->client->storeDoc($newDoc);
         } catch (Exception $e) {
@@ -42,7 +44,7 @@ class Feed_Database
     public function find_news_feed($id)
     {
         try {
-            $doc = $this->client->getDoc(str_replace('\'', '', $id));
+            $doc = $this->client->getDoc(utf8_encode($id));
             return $doc;
         } catch (Exception $e) {
             // echo "ERROR: ".$e->getMessage()." (".$e->getCode().")<br>\n";
